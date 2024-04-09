@@ -1,0 +1,1 @@
+# ymaps-address-component

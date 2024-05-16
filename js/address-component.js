@@ -10,14 +10,13 @@ import { environment } from './modules/ymaps/environment/environment.js';
 import { exceptionWords } from './modules/ymaps/constants/exception-words.constant.js';
 import { default as objectManagerOptions } from './modules/ymaps/constants/map-object-manager-options.js';
 import { default as uId } from './modules/ymaps/constants/unique-number.constants.js';
-import { default as YaBalloon } from './modules/ymaps/constants/ymaps-balloon.js';
 import { fitBoundsOpts } from './modules/ymaps/constants/fitbounds.constant.js';
 
 let gapiService;
 let map;
+let sideNavBar;
 let mapService;
 let objectManager;
-let sideNavBar;
 let geocoder;
 let filterCategory;
 let currentSheets;
@@ -38,7 +37,7 @@ async function onInit() {
 }
 
 
-function onTablePreloader(countItems = 5) {
+function onTablePreloader(countItems = 3) {
     [...Array(countItems).keys()].forEach(() => {
         const template = document.querySelector("#template-preloader-table");
         const htmlTemplate = template.content.cloneNode(true);
@@ -83,20 +82,10 @@ function getFilterFunction(categories) {
     }
 }
 
-function buildRow2(sheet) {
-    getRows(sheet)
-        .then((data) => {
-            buildPoints({ ...data, sheet }, true)
-                .then((collection) => {
-                    objectManager?.add(collection);
-                    // fitBounds();
-                });
-        });
-}
+
 
 async function updateDataSheets() {
-    const data = await getSheets();
-    data?.forEach((sheet) => sheet && buildRow2(sheet));
+    window.location.reload();
 }
 
 function getDeviceMobile() {
@@ -139,15 +128,18 @@ function buildTable(data) {
     const htmlTemplate = template.content.cloneNode(true);
     htmlTemplate.querySelector('#name').textContent = sheet || '';
     htmlTemplate.querySelector('#allCounts').textContent = allRows.length || '';
-    htmlTemplate.querySelector('#countsEmpty').textContent = countLenght === 0 ? allRows.length : allRows.length - countLenght || '0';
+    htmlTemplate.querySelector('#countsEmpty').textContent = countLenght === 0 ? allRows.length : allRows.length - countLenght || 'all';
     htmlTemplate.querySelector('tr')?.setAttribute('data-id', sheet);
+    htmlTemplate.querySelector('tr').style.display = 'table-row';
     htmlTemplate.querySelector('#preloader').style.width = countLenght === 0 ? `100%` : '0%';
     htmlTemplate.querySelector('input[type=checkbox]').addEventListener("change", onChangeFilter.bind(this));
     htmlTemplate.querySelector('input[type=checkbox]').value = sheet;
     htmlTemplate.querySelector('input[type=checkbox]').checked = isVisibleFeature;
     const position = currentSheets.map(e => e.title).indexOf(sheet);
-    const url = `https://docs.google.com/spreadsheets/d/1jAKfEmKwC0-s_YRvfxvg-GQ75cBDoPXyHH4o86i3FMM/edit#gid=${currentSheets[position].id}`;
+    const url2 = getCsvLink('1tF9n4KurhVmlbEGqLe3hN6oFEInn2Iciarvty8gOYnU', currentSheets[position].id)
+    const url = `https://docs.google.com/spreadsheets/d/1tF9n4KurhVmlbEGqLe3hN6oFEInn2Iciarvty8gOYnU/edit#gid=${currentSheets[position].id}`;
     htmlTemplate.querySelector('#link-view')?.setAttribute('href', url);
+    htmlTemplate.querySelector('#link-download')?.setAttribute('href', url2);
     table.append(htmlTemplate);
 }
 
@@ -235,10 +227,6 @@ function buildPoints(data, isEmpty) {
     });
 }
 
-function isCheckCoordinates() {
-    return (!point['Координаты']?.split(',')?.map(parseFloat)[0]);
-}
-
 function buildPoint(point) {
     return {
         type: 'Feature',
@@ -273,13 +261,20 @@ function geocoding(data) {
         })
         .progress((progress) => {
             const item = table.querySelector(`[data-id="${progress.message.properties.sheet}"]`);
-            item.querySelector('#preloader').style.width = `${progress.processed}%`;
+            item.querySelector('#preloader').style.width = progress.processed === 0 ? `${progress.processing}` : `${progress.processed}%`;
             const count = Number(item.querySelector('#countsEmpty').textContent);
             item.querySelector('#countsEmpty').textContent = count + 1;
+            if (item.querySelector('#allCounts').textContent == item.querySelector('#countsEmpty').textContent) {
+                item.querySelector('#preloader').style.width = `100%`;
+            }
         })
         .fail((err) => {
             console.log('error', err);
         });
+}
+
+function getCsvLink(sheetId, id) {
+    return 'https://docs.google.com/feeds/download/spreadsheets/Export?key=' + sheetId + '&exportFormat=csv&gid=' + id;
 }
 
 function fitBounds() {

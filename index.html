@@ -1007,7 +1007,7 @@
                     <div class="card-content">
                         <h5 class="card-title activator">
                             <a style="color: #414755;"
-                                href="https://docs.google.com/spreadsheets/d/1jAKfEmKwC0-s_YRvfxvg-GQ75cBDoPXyHH4o86i3FMM/edit#gid=0"
+                                href="https://docs.google.com/spreadsheets/d/1tF9n4KurhVmlbEGqLe3hN6oFEInn2Iciarvty8gOYnU/edit#gid=0"
                                 target="_blank">
                                 <i class="material-icons right tooltipped" data-position="left" data-delay="10"
                                     data-tooltip="Просмотреть таблицу">more_vert</i></a>
@@ -1032,10 +1032,10 @@
                         <div class="row">
                             <div class="card-content">
                                 <div class="form-action right">
-                                    <button class="btn default-2 waves-effect waves-light" type="button" name="action"
-                                        disabled>Получить данные таблицы
+                                    <button id="update-button"  class="btn default-2 waves-effect waves-light" type="button" name="action"
+                                        >Обновить страницу
                                     </button>
-                                    <button id="update-button" class="btn default waves-effect waves-light"
+                                    <button style="display: none;" class="btn default waves-effect waves-light"
                                         type="button" name="action" disabled>Распарсить таблицу
                                     </button>
                                 </div>
@@ -1053,7 +1053,7 @@
                                 <div class="row">
                                     <div class="input-field col s12">
                                         <input readonly placeholder="Table ID" id="tableId"
-                                            value="1Cht94cPgFuo57lWWheclROS64bAw8i9bHIPHFyzdl5k" type="text">
+                                            value="1tF9n4KurhVmlbEGqLe3hN6oFEInn2Iciarvty8gOYnU" type="text">
                                         <label for="table-id" class="active">Table ID</label>
                                     </div>
                                 </div>
@@ -1170,7 +1170,8 @@
                     id="allCounts">0</span></td>
             <td><a id="link-view" href="" target="_blank"> <i class="material-icons light-blue-text tooltipped"
                         data-tooltip="Открыть лист">visibility</i></a></td>
-            <td><i class="material-icons teal-text tooltipped" data-tooltip="Не сохранено">check_circle</i></td>
+                        <td><a id="link-download" href="" target="_blank"> <i class="material-icons light-blue-text tooltipped"
+                            data-tooltip="Открыть лист">download</i></a></td>
             <td> <label>
                     <input type="checkbox" class="filled-in" value="" />
                     <span></span>

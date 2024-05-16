@@ -13,7 +13,7 @@ export class YmapsGeocoderService {
 
         const { timeout } = options;
 
-        const Queue = QueueServise(ymaps.vow, timeout);
+        const Queue = QueueServise(ymaps.vow, 2000);
 
         const provider = this._provider;
         const queue = this._queue = new Queue({ weightLimit: 1 });

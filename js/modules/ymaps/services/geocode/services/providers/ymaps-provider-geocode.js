@@ -15,7 +15,7 @@ export class GeocoderProvider {
 
     ymaps.geocode(point.text, { results: 1 })
       .then((result) => {
-        defer.notify(this.getText(point), this.getText(point));
+        defer.notify(this.getText(point));
         onSuccess(this.process({ result, point }));
       }).catch(error => onFail(error));
 

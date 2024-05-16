@@ -59,6 +59,10 @@
             height: 80px;
         }
 
+        input[type="checkbox" i]:disabled {
+            cursor: not-allowed;
+        }
+
         .post .avatar {
             float: left;
             width: 52px;
@@ -1032,8 +1036,8 @@
                         <div class="row">
                             <div class="card-content">
                                 <div class="form-action right">
-                                    <button id="update-button"  class="btn default-2 waves-effect waves-light" type="button" name="action"
-                                        >Обновить страницу
+                                    <button id="update-button" class="btn default-2 waves-effect waves-light"
+                                        type="button" name="action">Обновить страницу
                                     </button>
                                     <button style="display: none;" class="btn default waves-effect waves-light"
                                         type="button" name="action" disabled>Распарсить таблицу
@@ -1170,8 +1174,8 @@
                     id="allCounts">0</span></td>
             <td><a id="link-view" href="" target="_blank"> <i class="material-icons light-blue-text tooltipped"
                         data-tooltip="Открыть лист">visibility</i></a></td>
-                        <td><a id="link-download" href="" target="_blank"> <i class="material-icons light-blue-text tooltipped"
-                            data-tooltip="Открыть лист">download</i></a></td>
+            <td><a id="link-download" href="" target="_blank"> <i class="material-icons light-blue-text tooltipped"
+                        data-tooltip="Открыть лист">download</i></a></td>
             <td> <label>
                     <input type="checkbox" class="filled-in" value="" />
                     <span></span>

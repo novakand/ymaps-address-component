@@ -127,14 +127,17 @@ function buildTable(data) {
     const template = document.querySelector("#template-sheet-table");
     const htmlTemplate = template.content.cloneNode(true);
     htmlTemplate.querySelector('#name').textContent = sheet || '';
-    htmlTemplate.querySelector('#allCounts').textContent = allRows.length || '';
-    htmlTemplate.querySelector('#countsEmpty').textContent = countLenght === 0 ? allRows.length : allRows.length - countLenght || 'all';
+    htmlTemplate.querySelector('#allCounts').textContent = allRows.length || '0';
+    htmlTemplate.querySelector('#countsEmpty').textContent = countLenght === 0 ? allRows.length : allRows.length - countLenght || '0';
     htmlTemplate.querySelector('tr')?.setAttribute('data-id', sheet);
     htmlTemplate.querySelector('tr').style.display = 'table-row';
     htmlTemplate.querySelector('#preloader').style.width = countLenght === 0 ? `100%` : '0%';
     htmlTemplate.querySelector('input[type=checkbox]').addEventListener("change", onChangeFilter.bind(this));
     htmlTemplate.querySelector('input[type=checkbox]').value = sheet;
     htmlTemplate.querySelector('input[type=checkbox]').checked = isVisibleFeature;
+    if (allRows.length === 0) {
+        htmlTemplate.querySelector('input[type=checkbox]').setAttribute('disabled', 'disabled');
+    }
     const position = currentSheets.map(e => e.title).indexOf(sheet);
     const url2 = getCsvLink('1tF9n4KurhVmlbEGqLe3hN6oFEInn2Iciarvty8gOYnU', currentSheets[position].id)
     const url = `https://docs.google.com/spreadsheets/d/1tF9n4KurhVmlbEGqLe3hN6oFEInn2Iciarvty8gOYnU/edit#gid=${currentSheets[position].id}`;
@@ -228,6 +231,7 @@ function buildPoints(data, isEmpty) {
 }
 
 function buildPoint(point) {
+    console.log(point, 'point')
     return {
         type: 'Feature',
         id: uId(),
@@ -238,7 +242,7 @@ function buildPoint(point) {
         properties: {
             ...point,
             balloonContentHeader: `<div>${point['Адрес']}</div>`,
-            balloonContentBody: `<div>${point['Координаты']}</div>`,
+            balloonContentBody: `<div>Лист: ${point['sheet']}</div> <div>Строка: ${point['rowIndex'] + 1}</div> <div>${point['Координаты']}</div> `,
         },
         options: {
             iconLayout: "default#image",
@@ -307,10 +311,10 @@ function isCoord(data) {
 function isEmptyCoord(data) {
     return data?.allRows
         .filter(item => !item['Координаты'])
-        .map((point) => ({ text: test(removeWords(point['Адрес'], exceptionWords), point), properties: { ...point, sheet: data.sheet } }));
+        .map((point) => ({ text: buildText(removeWords(point['Адрес'], exceptionWords), point), properties: { ...point, sheet: data.sheet } }));
 }
 
-function test(address, point) {
+function buildText(address, point) {
     const isCity = address.includes(point['Город']);
     return isCity ? address : `${point['Город']}, ${address}`;
 }

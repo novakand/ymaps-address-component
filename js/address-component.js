@@ -231,7 +231,6 @@ function buildPoints(data, isEmpty) {
 }
 
 function buildPoint(point) {
-    console.log(point, 'point')
     return {
         type: 'Feature',
         id: uId(),
